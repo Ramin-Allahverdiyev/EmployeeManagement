@@ -1,0 +1,39 @@
+server:
+  port: 8582
+  forward-headers-strategy: framework
+#logging:
+#  level:
+#    root: info
+#  #  file:
+#  #    name: C:\Users\Lenovo TUF\Desktop\logging\logger\myapp.log
+#  pattern:
+#    console: '%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}'
+##    file: '%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}'
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/employeemanagement?allowPublicKeyRetrieval=true&useSSL=false&sql_mode=ANSI_QUOTES
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 210602
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+root:
+  url: /api/v1/employee-management
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs.path: /api-docs
+secret:
+  key: cdbd7c27ad6ad0955292a0a8a27ab3f71fc7ad600474f6735b92b5244477ce9f
