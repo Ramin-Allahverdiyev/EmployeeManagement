@@ -40,8 +40,8 @@ class EmployeeControllerTest {
     }
     @Test
     void saveEmployeeSuccessTest() throws Exception{
-        var request=new EmployeeRequest("Ramin","Rov","ramin@gmail.com",1,1);
-        var response=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1,1);
+        var request=new EmployeeRequest("Ramin","Rov","ramin@gmail.com",1);
+        var response=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1);
         when(employeeService.saveEmployee(request)).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -59,8 +59,8 @@ class EmployeeControllerTest {
 
     @Test
     void getAllEmployeesSuccessTest() throws Exception{
-        var response1=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1,1);
-        var response2=new EmployeeResponse(14,"Akif","Quliyev","akif@gmail.com",2,2);
+        var response1=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1);
+        var response2=new EmployeeResponse(14,"Akif","Quliyev","akif@gmail.com",2);
         when(employeeService.getAllEmployees()).thenReturn(Arrays.asList(response1,response2));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -74,7 +74,7 @@ class EmployeeControllerTest {
     @Test
     void getEmployeeSuccessTest() throws Exception{
         int id=7;
-        var response=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1,1);
+        var response=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1);
         when(employeeService.getEmployee(id)).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -90,8 +90,8 @@ class EmployeeControllerTest {
     void updateEmployeeSuccessTest() throws Exception{
 
         int id=7;
-        var request=new EmployeeRequest("Ramin","Rov","ramin@gmail.com",1,1);
-        var response=new EmployeeResponse(7,"Ramil","Mov","ramin@gmail.com",1,1);
+        var request=new EmployeeRequest("Ramin","Rov","ramin@gmail.com",1);
+        var response=new EmployeeResponse(7,"Ramil","Mov","ramin@gmail.com",1);
         when(employeeService.updateEmployee(id,request)).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders

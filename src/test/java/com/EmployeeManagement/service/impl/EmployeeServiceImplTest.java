@@ -56,7 +56,7 @@ class EmployeeServiceImplTest {
     @Test
     public void saveEmployeeTest(){
 
-        var request= new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1,1);
+        var request= new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1);
         var employee = Employee.builder().name("Ramin").surname("Allahverdiyev").email("ramin@gmail.com").build();
 
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
@@ -107,7 +107,7 @@ class EmployeeServiceImplTest {
     public void updateEmployeeTest(){
 
         int id=1;
-        var employeeRequest=new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1,1);
+        var employeeRequest=new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1);
         var employee = Employee.builder().id(id).name("Akif").build();
         given(employeeRepository.findByIdAndEmployeeStatus(id,ExistStatus.ACTIVE.getId())).willReturn(Optional.of(employee));
         employee.setName(employeeRequest.getName());
@@ -122,7 +122,7 @@ class EmployeeServiceImplTest {
     @Test
     public void updateEmployeeExceptionTest(){
         int id=1;
-        var employeeRequest=new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1,1);
+        var employeeRequest=new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1);
         when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class,()-> employeeService.updateEmployee(id,employeeRequest));

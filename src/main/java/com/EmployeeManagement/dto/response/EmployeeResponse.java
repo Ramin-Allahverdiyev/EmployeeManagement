@@ -14,6 +14,5 @@ public class EmployeeResponse {
     private String name;
     private String surname;
     private String email;
-    private int departmentId;
     private int positionId;
 }

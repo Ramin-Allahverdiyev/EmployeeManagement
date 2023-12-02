@@ -32,13 +32,6 @@ public class Department {
     )
     private Set<Position> positions=new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "department",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<Employee> employees=new HashSet<>();
-
     @Column(name = "department_status")
     private int departmentStatus;
     @PrePersist
