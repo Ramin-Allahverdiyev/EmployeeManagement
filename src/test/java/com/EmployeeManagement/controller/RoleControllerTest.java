@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,7 @@ class RoleControllerTest {
     void saveRoleSuccessTest() throws Exception{
         var request=new RoleRequest("ADMIN");
         var response=new RoleResponse(7,"ADMIN");
-        when(roleService.saveRole(request)).thenReturn(response);
+        when(roleService.saveRole(request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/employee-management/role/save")
@@ -75,7 +76,7 @@ class RoleControllerTest {
         int id=7;
         var request=new RoleRequest("ADMIN");
         var response=new RoleResponse(7,"USER");
-        when(roleService.updateRole(id,request)).thenReturn(response);
+        when(roleService.updateRole(id,request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/v1/employee-management/role/{id}",id)

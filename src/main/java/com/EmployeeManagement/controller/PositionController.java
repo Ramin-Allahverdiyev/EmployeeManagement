@@ -3,12 +3,14 @@ package com.EmployeeManagement.controller;
 import com.EmployeeManagement.dto.request.PositionRequest;
 import com.EmployeeManagement.dto.response.PositionResponse;
 import com.EmployeeManagement.service.PositionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,17 +19,17 @@ public class PositionController {
     private final PositionService positionService;
 
     @PostMapping("/save")
-    public PositionResponse savePosition(@RequestBody PositionRequest request){
+    public Optional<PositionResponse> savePosition(@Valid @RequestBody PositionRequest request){
         return positionService.savePosition(request);
     }
 
     @GetMapping("/{id}")
-    public PositionResponse getPosition(@PathVariable int id){
+    public Optional<PositionResponse> getPosition(@PathVariable int id){
         return positionService.getPosition(id);
     }
 
     @PutMapping("/{id}")
-    public PositionResponse updatePosition(@PathVariable int id, @RequestBody PositionRequest request){
+    public Optional<PositionResponse> updatePosition(@PathVariable int id, @Valid @RequestBody PositionRequest request){
         return positionService.updatePosition(id,request);
     }
 

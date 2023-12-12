@@ -1,7 +1,9 @@
 package com.EmployeeManagement.service.impl;
 
+import com.EmployeeManagement.dto.RoleDto;
 import com.EmployeeManagement.dto.request.RoleRequest;
 import com.EmployeeManagement.dto.response.RoleResponse;
+import com.EmployeeManagement.entity.Role;
 import com.EmployeeManagement.exception.NotFoundException;
 import com.EmployeeManagement.mapper.RoleMapper;
 import com.EmployeeManagement.model.ExistStatus;
@@ -12,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,17 +23,17 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public RoleResponse saveRole(RoleRequest request) {
+    public Optional<RoleResponse> saveRole(RoleRequest request) {
         logger.info("ActionLog.saveRole.start request: {}",request);
         var role = RoleMapper.INSTANCE.dtoToEntity(request);
         var savedRole = roleRepository.save(role);
         var response =RoleMapper.INSTANCE.entityToDto(savedRole);
         logger.info("ActionLog.saveRole.stop response: {}",response);
-        return response;
+        return Optional.of(response);
     }
 
     @Override
-    public RoleResponse updateRole(int id, RoleRequest request) {
+    public Optional<RoleResponse> updateRole(int id, RoleRequest request) {
         logger.info("ActionLog.updateRole.start id: {}",id);
         var role = roleRepository.findByIdAndRoleStatus(id, ExistStatus.ACTIVE.getId())
                 .orElseThrow(() -> new NotFoundException("Role is not found"));
@@ -39,7 +41,20 @@ public class RoleServiceImpl implements RoleService {
         var updatedRole = roleRepository.save(role);
         var roleResponse = RoleMapper.INSTANCE.entityToDto(updatedRole);
         logger.info("ActionLog.updateRole.end id: {}",id);
-        return roleResponse;
+        return Optional.of(roleResponse);
+    }
+
+    @Override
+    public List<Role> getRoles(List<RoleDto> roleDto) {
+        logger.info("ActionLog.getRoleById.start");
+        var roleList = new ArrayList<Role>();
+        for (RoleDto role : roleDto) {
+            var getRole = roleRepository.findByIdAndRoleStatus(role.getId(), ExistStatus.ACTIVE.getId())
+                    .orElseThrow(() -> new NotFoundException("Role is not exist for this id: "+role.getId()));
+            roleList.add(getRole);
+        }
+        logger.info("ActionLog.getRoleById.end");
+        return roleList;
     }
 
     @Override

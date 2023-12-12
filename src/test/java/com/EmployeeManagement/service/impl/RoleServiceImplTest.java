@@ -1,5 +1,6 @@
 package com.EmployeeManagement.service.impl;
 
+import com.EmployeeManagement.dto.RoleDto;
 import com.EmployeeManagement.dto.request.RoleRequest;
 import com.EmployeeManagement.entity.Role;
 import com.EmployeeManagement.exception.NotFoundException;
@@ -11,13 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class RoleServiceImplTest {
@@ -103,4 +106,36 @@ class RoleServiceImplTest {
         assertThrows(NotFoundException.class,()-> roleService.updateRole(id,request));
     }
 
+    @DisplayName("Get roles of certain user")
+    @Test
+    public void getRolesTest() {
+        List<RoleDto> roleDtoList = new ArrayList<>();
+        RoleDto roleDto = new RoleDto();
+        roleDto.setId(1);
+        roleDtoList.add(roleDto);
+
+        Role role = new Role();
+        role.setId(1);
+
+        when(roleRepository.findByIdAndRoleStatus(eq(1), anyInt())).thenReturn(Optional.of(role));
+
+        List<Role> result = roleService.getRoles(roleDtoList);
+
+        assertEquals(1, result.size());
+        assertEquals(role.getId(), result.get(0).getId());
+        verify(roleRepository, times(1)).findByIdAndRoleStatus(eq(1), anyInt());
+    }
+
+    @Test
+    public void getRolesExceptionTest() {
+        List<RoleDto> roleDtoList = new ArrayList<>();
+        RoleDto roleDto = new RoleDto();
+        roleDto.setId(1);
+        roleDtoList.add(roleDto);
+
+        when(roleRepository.findByIdAndRoleStatus(eq(1), anyInt())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> roleService.getRoles(roleDtoList));
+        verify(roleRepository, times(1)).findByIdAndRoleStatus(eq(1), anyInt());
+    }
 }

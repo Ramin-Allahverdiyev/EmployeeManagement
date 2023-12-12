@@ -11,12 +11,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Builder
@@ -33,8 +30,7 @@ public class User implements UserDetails {
     private String name;
     private String surname;
 
-    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-    @NotEmpty(message = "Email cannot be empty")
+
     private String email;
 
     @Column(unique = true)
@@ -42,12 +38,12 @@ public class User implements UserDetails {
     private String password;
     private boolean status;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private Set<Role> roles=new HashSet<>();
+    private List<Role> roles=new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.when;
@@ -39,9 +40,9 @@ class PositionControllerTest {
     }
     @Test
     void savePositionSuccessTest() throws Exception{
-        var request=new PositionRequest("Junior",100.0,1);
-        var response=new PositionResponse(7,"Junior",100.0,1);
-        when(positionService.savePosition(request)).thenReturn(response);
+        var request=new PositionRequest("Junior",351.0,1);
+        var response=new PositionResponse(7,"Junior",351.0,1);
+        when(positionService.savePosition(request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/employee-management/position/save")
@@ -52,7 +53,7 @@ class PositionControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.id").value(7))
                 .andExpect(jsonPath("$.name").value("Junior"))
-                .andExpect(jsonPath("$.salary").value(100.0));
+                .andExpect(jsonPath("$.salary").value(351.0));
 
     }
 
@@ -74,7 +75,7 @@ class PositionControllerTest {
     void getPositionSuccessTest() throws Exception{
         int id=7;
         var response=new PositionResponse(7,"Middle",200.0,2);
-        when(positionService.getPosition(id)).thenReturn(response);
+        when(positionService.getPosition(id)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/employee-management/position/{id}",id)
@@ -89,9 +90,9 @@ class PositionControllerTest {
     void updatePositionSuccessTest() throws Exception{
 
         int id=7;
-        var request=new PositionRequest("Junior",100.0,1);
-        var response=new PositionResponse(7,"Middle",200.0,1);
-        when(positionService.updatePosition(id,request)).thenReturn(response);
+        var request=new PositionRequest("Junior",351.0,1);
+        var response=new PositionResponse(7,"Middle",351.0,1);
+        when(positionService.updatePosition(id,request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/v1/employee-management/position/{id}",id)
@@ -102,7 +103,7 @@ class PositionControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.id").value(7))
                 .andExpect(jsonPath("$.name").value("Middle"))
-                .andExpect(jsonPath("$.salary").value(200.0));
+                .andExpect(jsonPath("$.salary").value(351.0));
     }
 
     @Test

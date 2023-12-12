@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,7 @@ class EmployeeControllerTest {
     void saveEmployeeSuccessTest() throws Exception{
         var request=new EmployeeRequest("Ramin","Rov","ramin@gmail.com",1);
         var response=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1);
-        when(employeeService.saveEmployee(request)).thenReturn(response);
+        when(employeeService.saveEmployee(request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/employee-management/employee/save")
@@ -75,7 +76,7 @@ class EmployeeControllerTest {
     void getEmployeeSuccessTest() throws Exception{
         int id=7;
         var response=new EmployeeResponse(7,"Ramin","Rov","ramin@gmail.com",1);
-        when(employeeService.getEmployee(id)).thenReturn(response);
+        when(employeeService.getEmployee(id)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/employee-management/employee/{id}",id)
@@ -92,7 +93,7 @@ class EmployeeControllerTest {
         int id=7;
         var request=new EmployeeRequest("Ramin","Rov","ramin@gmail.com",1);
         var response=new EmployeeResponse(7,"Ramil","Mov","ramin@gmail.com",1);
-        when(employeeService.updateEmployee(id,request)).thenReturn(response);
+        when(employeeService.updateEmployee(id,request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/v1/employee-management/employee/{id}",id)

@@ -1,10 +1,12 @@
 package com.EmployeeManagement.service.impl;
 
 import com.EmployeeManagement.dto.request.PositionRequest;
+import com.EmployeeManagement.entity.Department;
 import com.EmployeeManagement.entity.Position;
 import com.EmployeeManagement.exception.NotFoundException;
 import com.EmployeeManagement.model.ExistStatus;
 import com.EmployeeManagement.repository.PositionRepository;
+import com.EmployeeManagement.service.DepartmentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,6 +28,8 @@ import static org.mockito.Mockito.*;
 class PositionServiceImplTest {
     @Mock
     private PositionRepository positionRepository;
+    @Mock
+    private DepartmentService departmentService;
     @InjectMocks
     private PositionServiceImpl positionService;
 
@@ -40,11 +44,11 @@ class PositionServiceImplTest {
         var positionResponse = positionService.getPosition(id);
 
         assertNotNull(positionResponse);
-        assertEquals(1, positionResponse.getId());
-        assertEquals("Junior", positionResponse.getName());
+        assertEquals(1, positionResponse.get().getId());
+        assertEquals("Junior", positionResponse.get().getName());
     }
 
-    @DisplayName("According to given id , finding exception")
+
     @Test
     public void getPositionExceptionTest(){
         int id = 1;
@@ -110,6 +114,8 @@ class PositionServiceImplTest {
         int id=1;
         var positionRequest=new PositionRequest("Junior",100.0,1);
         var position = Position.builder().id(id).name("Middle").build();
+        var department = Department.builder().id(positionRequest.getDepartmentId()).name("IT").departmentStatus(1).build();
+        when(departmentService.getDepartmentById(positionRequest.getDepartmentId())).thenReturn(department);
         given(positionRepository.findByIdAndPositionStatus(id,ExistStatus.ACTIVE.getId())).willReturn(Optional.of(position));
         position.setName(positionRequest.getName());
 
@@ -129,4 +135,26 @@ class PositionServiceImplTest {
 
         assertThrows(NotFoundException.class,()-> positionService.updatePosition(id,request));
     }
+    @DisplayName("According to given id , finding exception")
+    @Test
+    public void getPositionByIdTest() {
+        int id=1;
+        var position= Position.builder().id(id).name("Junior").positionStatus(ExistStatus.ACTIVE.getId()).build();
+
+        when(positionRepository.findById(id)).thenReturn(Optional.of(position));
+
+        var positionById = positionService.getPositionById(id);
+
+        assertNotNull(positionById);
+        assertEquals(1, positionById.getId());
+        assertEquals("Junior", positionById.getName());
+    }
+
+    @Test
+    public void getPositionByIdExceptionTest() {
+        int id = 1;
+        when(positionRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> positionService.getPosition(id));
+    }
+
 }

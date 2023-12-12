@@ -29,6 +29,7 @@ public class Position {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departmentId")
     private Department department;
+
     @OneToMany(
             mappedBy = "position",
             cascade = CascadeType.ALL,

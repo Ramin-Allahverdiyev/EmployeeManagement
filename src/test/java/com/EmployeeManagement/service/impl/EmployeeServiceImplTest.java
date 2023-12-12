@@ -2,9 +2,11 @@ package com.EmployeeManagement.service.impl;
 
 import com.EmployeeManagement.dto.request.EmployeeRequest;
 import com.EmployeeManagement.entity.Employee;
+import com.EmployeeManagement.entity.Position;
 import com.EmployeeManagement.exception.NotFoundException;
 import com.EmployeeManagement.model.ExistStatus;
 import com.EmployeeManagement.repository.EmployeeRepository;
+import com.EmployeeManagement.service.PositionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,6 +27,8 @@ import static org.mockito.Mockito.when;
 class EmployeeServiceImplTest {
     @Mock
     private EmployeeRepository employeeRepository;
+    @Mock
+    private PositionService positionService;
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
@@ -39,8 +43,8 @@ class EmployeeServiceImplTest {
         var employeeResponse = employeeService.getEmployee(id);
 
         assertNotNull(employeeResponse);
-        assertEquals(1, employeeResponse.getId());
-        assertEquals("Ramin", employeeResponse.getName());
+        assertEquals(1, employeeResponse.get().getId());
+        assertEquals("Ramin", employeeResponse.get().getName());
 
     }
 
@@ -109,6 +113,8 @@ class EmployeeServiceImplTest {
         int id=1;
         var employeeRequest=new EmployeeRequest("Ramin","Allahverdiyev","ramin@gmail.com",1);
         var employee = Employee.builder().id(id).name("Akif").build();
+        var position= Position.builder().id(employeeRequest.getPositionId()).name("Junior").salary(1200).build();
+        when(positionService.getPositionById(employeeRequest.getPositionId())).thenReturn(position);
         given(employeeRepository.findByIdAndEmployeeStatus(id,ExistStatus.ACTIVE.getId())).willReturn(Optional.of(employee));
         employee.setName(employeeRequest.getName());
 

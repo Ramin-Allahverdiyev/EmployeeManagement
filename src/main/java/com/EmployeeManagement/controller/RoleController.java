@@ -3,12 +3,14 @@ package com.EmployeeManagement.controller;
 import com.EmployeeManagement.dto.request.RoleRequest;
 import com.EmployeeManagement.dto.response.RoleResponse;
 import com.EmployeeManagement.service.RoleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @PostMapping("/save")
-    public RoleResponse saveRole(@RequestBody RoleRequest request){
+    public Optional<RoleResponse> saveRole(@Valid @RequestBody RoleRequest request){
         return roleService.saveRole(request);
     }
 
@@ -33,7 +35,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public RoleResponse updateRole(@PathVariable int id, @RequestBody RoleRequest request){
+    public Optional<RoleResponse> updateRole(@PathVariable int id, @Valid @RequestBody RoleRequest request){
         return roleService.updateRole(id,request);
     }
 }

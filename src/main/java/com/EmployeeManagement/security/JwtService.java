@@ -1,4 +1,4 @@
-package com.EmployeeManagement.service.jwt;
+package com.EmployeeManagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,11 +20,20 @@ public class JwtService {
     @Value("${secret.key}")
     private String secretKey;
 
-    public String generateToken(UserDetails userDetails){
+    public String generateAccessToken(UserDetails userDetails){
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60*10000))
+                .expiration(new Date(System.currentTimeMillis() + 30*60000))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateRefreshToken(UserDetails userDetails){
+        return Jwts.builder()
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 120*60000))
                 .signWith(getSigningKey())
                 .compact();
     }

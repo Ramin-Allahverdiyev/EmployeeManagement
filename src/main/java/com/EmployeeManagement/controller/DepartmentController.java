@@ -3,12 +3,14 @@ package com.EmployeeManagement.controller;
 import com.EmployeeManagement.dto.request.DepartmentRequest;
 import com.EmployeeManagement.dto.response.DepartmentResponse;
 import com.EmployeeManagement.service.DepartmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,17 +19,17 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @PostMapping("/save")
-    public DepartmentResponse saveDepartment(@RequestBody DepartmentRequest request){
+    public Optional<DepartmentResponse> saveDepartment(@Valid @RequestBody DepartmentRequest request){
         return departmentService.saveDepartment(request);
     }
 
     @GetMapping("/{id}")
-    public DepartmentResponse getDepartment(@PathVariable int id){
+    public Optional<DepartmentResponse> getDepartment(@PathVariable int id){
         return departmentService.getDepartment(id);
     }
 
     @PutMapping("/{id}")
-    public DepartmentResponse updateDepartment(@PathVariable int id, @RequestBody DepartmentRequest request){
+    public Optional<DepartmentResponse> updateDepartment(@PathVariable int id, @Valid @RequestBody DepartmentRequest request){
         return departmentService.updateDepartment(id,request);
     }
 

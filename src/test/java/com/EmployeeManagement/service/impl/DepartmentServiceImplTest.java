@@ -39,12 +39,12 @@ class DepartmentServiceImplTest {
         var departmentResponse = departmentService.getDepartment(id);
 
         assertNotNull(departmentResponse);
-        assertEquals(1, departmentResponse.getId());
-        assertEquals("IT", departmentResponse.getName());
+        assertEquals(1, departmentResponse.get().getId());
+        assertEquals("IT", departmentResponse.get().getName());
 
     }
 
-    @DisplayName("According to given id , finding exception")
+
     @Test
     public void getDepartmentExceptionTest(){
         int i= 1;
@@ -89,6 +89,7 @@ class DepartmentServiceImplTest {
         var department= Department.builder().id(id).name("It").departmentStatus(ExistStatus.ACTIVE.getId()).build();
         given(departmentRepository.findByIdAndDepartmentStatus(id,ExistStatus.ACTIVE.getId())).willReturn(Optional.of(department));
         willDoNothing().given(departmentRepository).delete(department);
+        willDoNothing().given(departmentRepository).deactivePositionByDepartmentId(id);
 
         departmentService.deleteDepartment(id);
 
@@ -129,5 +130,25 @@ class DepartmentServiceImplTest {
 
         assertThrows(NotFoundException.class,()-> departmentService.updateDepartment(i,request));
     }
+    @DisplayName("According to given id , finding exception")
+    @Test
+    public void getDepartmentByIdTest() {
+        int id=1;
+        var department= Department.builder().id(id).name("IT").departmentStatus(1).build();
 
+        when(departmentRepository.findById(id)).thenReturn(Optional.of(department));
+
+        var departmentById = departmentService.getDepartmentById(id);
+
+        assertNotNull(departmentById);
+        assertEquals(1, departmentById.getId());
+        assertEquals("IT", departmentById.getName());
+    }
+
+    @Test
+    public void getDepartmentByIdExceptionTest(){
+        int i= 1;
+        when(departmentRepository.findById(i)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> departmentService.getDepartmentById(i));
+    }
 }

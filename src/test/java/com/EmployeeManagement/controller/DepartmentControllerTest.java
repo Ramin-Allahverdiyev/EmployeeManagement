@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,7 @@ class DepartmentControllerTest {
     void saveDepartmentSuccessTest() throws Exception{
         var request=new DepartmentRequest("IT");
         var response=new DepartmentResponse(7,"IT");
-        when(departmentService.saveDepartment(request)).thenReturn(response);
+        when(departmentService.saveDepartment(request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                     .post("/api/v1/employee-management/department/save")
@@ -74,7 +75,7 @@ class DepartmentControllerTest {
     void getDepartmentSuccessTest() throws Exception{
         int id=7;
         var response=new DepartmentResponse(id,"IT");
-        when(departmentService.getDepartment(id)).thenReturn(response);
+        when(departmentService.getDepartment(id)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/employee-management/department/{id}",id)
@@ -91,7 +92,7 @@ class DepartmentControllerTest {
         int id=7;
         var request=new DepartmentRequest("IT");
         var response=new DepartmentResponse(7,"Accounting");
-        when(departmentService.updateDepartment(id,request)).thenReturn(response);
+        when(departmentService.updateDepartment(id,request)).thenReturn(Optional.of(response));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/v1/employee-management/department/{id}",id)
